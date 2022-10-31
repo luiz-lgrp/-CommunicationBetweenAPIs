@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using PokeAcademy.Refit.Services;
 
 namespace PokeAcademy.Refit.Controllers
 {
@@ -9,32 +10,43 @@ namespace PokeAcademy.Refit.Controllers
     [ApiController]
     public class PokemonRefitController : ControllerBase
     {
-        private const string ALL_POKEMON_URL = "https://pokeapi.co/api/v2/pokemon";
-        private const string EXTERNAL_BASE_URL = "https://localhost:7235";
+
         private const string TOKEN = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
+
+        private readonly IPokeService _pokeService;
+        private readonly IExternalService _externalService;
+
+        public PokemonRefitController(IPokeService pokeService, IExternalService externalService)
+        {
+            _pokeService = pokeService;
+            _externalService = externalService;
+        }
 
 
         [HttpGet]
         public async Task<IActionResult> GetAll(int limit)
         {
+            var result = await _pokeService.GetAll(limit);
 
-            return Ok();
+            var viewModelList = MapToViewModel(result);
+
+            return Ok(viewModelList);
         }
-
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
+            var result = await _pokeService.GetById(id);
 
-            return Ok();
+            return Ok(result);
         }
 
-
         [HttpPost]
-        public async Task<IActionResult> Post(Ping ping)// neste cenário estou enviando um cabeçalho fixo e um como parametro
+        public async Task<IActionResult> Post(Ping ping)
         {
+            var result = await _externalService.PostHeader(ping, TOKEN);
 
-            return Ok();
+            return Ok(result);
         }
 
 
