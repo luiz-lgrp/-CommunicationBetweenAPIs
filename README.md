@@ -3,6 +3,7 @@
 <p>Projeto feito para demonstrar o uso dos frameworks na comunicação entre API's em .NET </p>
 <br>
 <p>O projeto contém uma solução dividida em três projetos e um projeto simulando uma API externa</p>
+<p>A API utilizada veio do site: https://pokeapi.co/</p>
 <br>
 <p>Os seguintes frameworks são abordados: </p>
 
